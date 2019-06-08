@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>currency exchange map</title>
+    <base target="_blank">
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyB8xNRCT4K6UpvYpjeaFYVm2nuGQ79WYoA&callback=initMap"></script>
+    
+    <style>
+      *{
+        padding:0;
+        margin:0;
+      }
+      html { height: 100% }
+      body { height: 100% }
+      #map { height: 100%; width: 100%}
+    </style>
+  </head>
+  <body>
+
+<div id ="map"></div>
+
+<script type="text/javascript">
+'use strict';
+
+
+let maps = [
+  {
+    name: '<a href="https://www.travelex.co.jp/stores/">TRAVELEX </br> 京都四条店</a>',
+    time1: '11:00~19:00',
+    time2: '11:00~19:00',
+    time3: '11:00~18:30',
+    lat: 35.003458,
+    lng: 135.7637023
+ }, {
+    name: '<a href="https://www.travelex.co.jp/stores/">TRAVELEX </br> 京都西口店</a>',
+    time1: '09:00~20:00',
+    time2: '09:00~20:00',
+    time3: '09:00~20:00',
+    lat: 34.985849,
+    lng: 135.758767
+ }, {
+      name: '<a href="https://www.travelex.co.jp/stores/">TRAVELX </br> TiS京都店</a>',
+      time1: '09:30~19:00',
+      time2: '09:30~19:00',
+      time3: '09:30~19:00',
+      lat: 34.986120,
+      lng: 135.759311
+ }, {
+      name: '<a href="http://www.tokyo-card.co.jp/wcs/shopdtl.php?no=31">WORLD CURRENCY SHOP </br> 京都駅ビル店</a>',
+      time1: '10:00~17:00',
+      time2: 'closed',
+      time3: 'closed',
+      lat: 34.985841,
+      lng: 135.758121
+ }, {
+      name: '<a href="http://www.tokyo-card.co.jp/wcs/shopdtl.php?no=44">WORLD CURRENCY SHOP </br> 京都店</a>',
+      time1: '09:00~16:30',
+      time2: 'closed',
+      time3: 'closed',
+      lat: 35.003311,
+      lng: 135.760021
+  }, {
+  name: '<a href="http://www.sihd-bk.jp/tenpo/quick/karasuma.html">からすま京都ホテル自動外貨両替コーナー</a>',
+  time1: '9：00～21：00',
+  time2: '9：00～21：00',
+  time3: '9：00～21：00',
+  lat: 35.001826,
+  lng: 135.759348
+}, {
+  name: '<a href="https://www.exchangers.co.jp/index.php">Exchangers </br> 清水茶わん坂店</a>',
+  time1: '10:00~18:00',
+  time2: '10:00~18:00',
+  time3: '10:00~18:00',
+  lat: 34.995189,
+  lng: 135.778179
+}, {
+  name: '<a href="">Exchangers </br> 四条室町店</a>',
+  time1: '10:00~20:00',
+  time2: '10:00~20:00',
+  time3: '10:00~20:00',
+  lat: 35.003825,
+  lng: 135.758192
+}, {
+  name: '<a href="https://www.smbctb.co.jp/gaika_ryougae/index.html">PRESTIA EXCHANGE　</br> 四条外貨両替コーナー</a>',
+  time1: '11:00~18:30',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.003293,
+  lng: 135.769556
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144004000/?&cond13=1&cond200=1&&his=sa%2Csa1%2Csa2">右京郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.999638,
+  lng: 135.724643
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144199000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">西陣郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.029537,
+  lng: 135.744074
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144299000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">京都北郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.050170,
+  lng: 135.751983
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144080000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">左京郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.042077,
+  lng: 135.780714
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144148000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">今日百万遍郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.028971,
+  lng: 135.779669
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144089000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">京都中央郵便局</a>',
+  time1: '09:00~18:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.986456,
+  lng: 135.757136
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144153000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">中京郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.009058,
+  lng: 135.761268
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144015000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">東山郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.994794,
+  lng: 135.771384
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144154000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">伏見郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.945802,
+  lng: 135.764400
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144182000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">宇治郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.890846,
+  lng: 135.792724
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144184000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">山城田辺郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.812456,
+  lng: 135.772451
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144179000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">福知山郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.301081,
+  lng: 135.118714
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144181000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">西舞鶴郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.447534,
+  lng: 135.327542
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144027000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">東舞鶴郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.472375,
+  lng: 135.393920
+}, {
+  name: '<a href="https://map.japanpost.jp/p/search/dtl/300144201000/?&cond13=on&cond200=1&&his=sa%2Csa1%2Csa2">向日町郵便局</a>',
+  time1: '09:00~16:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.939782,
+  lng: 135.699727
+}, {
+  name: '<a href="https://www.tokyuhotels.co.jp/kyoto-h/guide/exchange/index.html">京都東急ホテル</a>',
+  time1: '24 hours',
+  time2: '24 hours',
+  time3: '24 hours',
+  lat: 34.995122,
+  lng: 135.751696
+}, {
+  name: '<a href="https://www.princess-kyoto.co.jp/stay_service/19080">ホテル日航プリンセス京都</a>',
+  time1: '24 hours',
+  time2: '24 hours',
+  time3: '24 hours',
+  lat: 35.000474,
+  lng: 135.760777
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/kyoto-stn">トーカイ　</br> 京都駅前店</a>',
+  time1: '09:30~19:30',
+  time2: '09:00~19:30',
+  time3: '09:00~19:00',
+  lat: 34.987427,
+  lng: 135.760856
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/kyoto-tower">トーカイ　</br> 京都タワー前店</a>',
+  time1: '10:00~20:00',
+  time2: '10:00~20:00',
+  time3: '10:00~20:00',
+  lat: 34.987447,
+  lng: 135.760000
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/avanti">トーカイ　</br> アバンティ店</a>',
+  time1: '10:00~20:00',
+  time2: '10:00~20:00',
+  time3: '10:00~20:00',
+  lat: 34.9835100,
+  lng: 135.760005
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/kyoto-aeonmall">トーカイ　</br> イオンモールKYOTO店</a>',
+  time1: '10:00~20:00',
+  time2: '10:00~20:00',
+  time3: '10:00~20:00',
+  lat: 34.982187,
+  lng: 135.755206
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/shijo-kawaramachi">トーカイ　</br> 四条河原町店</a>',
+  time1: '10:00~20:00',
+  time2: '10:00~20:00',
+  time3: '10:00~20:00',
+  lat: 35.003612,
+  lng: 135.767483
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/sanjo-kawaramachi">トーカイ　</br> 三条河原町店</a>',
+  time1: '10:00~20:00',
+  time2: '10:00~20:00',
+  time3: '10:00~20:00',
+  lat: 35.008949,
+  lng: 135.769164
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/ownersblog/shops/shijo-omiya">トーカイ　</br> 四条大宮店</a>',
+  time1: '10:00~20:00',
+  time2: '10:00~20:00',
+  time3: '10:00~20:00',
+  lat: 35.003080,
+  lng: 135.749159
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/shijo-karasuma">トーカイ　</br> 四条烏丸店</a>',
+  time1: '10:00~20:00',
+  time2: '10:00~19:00',
+  time3: 'closed',
+  lat: 35.003591,
+  lng: 135.757136
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/enmachi">トーカイ　</br> 円町店</a>',
+  time1: '10:00~20:00',
+  time2: '10:00~20:00',
+  time3: 'closed',
+  lat: 35.018792,
+  lng: 135.732087
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/yamashina-stn">トーカイ　</br> 山科駅前店</a>',
+  time1: '10:00~19:30',
+  time2: '10:00~19:30',
+  time3: '10:00~19:30',
+  lat: 34.991965,
+  lng: 135.817506
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/racto-yamashina">トーカイ　</br> ラクト山科店</a>',
+  time1: '10:00~19:30',
+  time2: '10:00~19:30',
+  time3: '10:00~19:30',
+  lat: 34.991438,
+  lng: 135.816703
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/kitaoji_vivre">トーカイ　</br> 北大路ビブレ店</a>',
+  time1: '10:00~21:00',
+  time2: '10:00~21:00',
+  time3: '10:00~21:00',
+  lat: 35.044820,
+  lng: 135.758481
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/katsuraekimae">トーカイ　</br> 桂駅前店</a>',
+  time1: '10:00~19:30',
+  time2: '10:00~19:30',
+  time3: '10:00~19:30',
+  lat: 34.980114,
+  lng: 135.702410
+} , {
+  name: '<a href="https://www.tokai-ticket.co.jp/ownersblog/shops/newopen">トーカイ　</br> ラクセーヌ店</a>',
+  time1: '10:00~19:30',
+  time2: '10:00~19:30',
+  time3: '10:00~19:30',
+  lat: 34.962607,
+  lng: 135.676567
+}, {
+  name: '<a href="https://www.tokai-ticket.co.jp/shops/rokujizo">トーカイ　</br> 六地蔵店</a>',
+  time1: '10:00~19:00',
+  time2: '10:00~19:00',
+  time3: '10:00~19:00',
+  lat: 34.932715,
+  lng: 135.798688
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721447/">京都銀行　</br> 本店営業部</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.999647,
+  lng: 135.759380
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721463/">京都銀行　</br> 京都駅前支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.985136,
+  lng: 135.760151
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721469/">京都銀行　</br> 三条支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.008500,
+  lng: 135.759929
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721488/">京都銀行　</br> 西陣支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.029336,
+  lng: 135.742247
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721490/">京都銀行　</br> 銀閣寺支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.027745,
+  lng: 135.791754
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721492/">京都銀行　</br> 下鴨支店</a>',
+  time1: '09:00~15:00',
+  time2: '09:30~15:00',
+  time3: '09:30~15:00',
+  lat: 35.043790,
+  lng: 135.771371
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721539/">京都銀行　</br> 金閣寺支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.038176,
+  lng: 135.732787
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721553/">京都銀行　</br> 東山支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.998083,
+  lng: 135.776819
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721555/">京都銀行　</br> 山科支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.989526,
+  lng: 135.817483
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721568/">京都銀行　</br> 稲荷支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.968336,
+  lng: 135.771139
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721572/">京都銀行　</br> 伏見支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.933170,
+  lng: 135.761257
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721635/">京都銀行　</br> 長岡支店</a>',
+  time1: '09:00~15:00',
+  time2: '09:30~15:00',
+  time3: '09:30~15:00',
+  lat: 34.926092,
+  lng: 135.694312
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721645/">京都銀行　</br> 宇治支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.886765,
+  lng: 135.799493
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721667/">京都銀行　</br> 田辺支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.819424,
+  lng: 135.770191
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721673/">京都銀行　</br> 城陽支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.852007,
+  lng: 135.781210
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721680/">京都銀行　</br> 亀岡支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.016404,
+  lng: 135.577082
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721708/">京都銀行　</br> 福知山支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.298612,
+  lng: 135.118940
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721720/">京都銀行　</br> 綾部支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.300977,
+  lng: 135.252905
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721727/">京都銀行　</br> 東舞鶴支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.473062,
+  lng: 135.392910
+}, {
+  name: '<a href="https://sasp.mapion.co.jp/b/kyotobank/info/BA721739/">京都銀行　</br> 宮津支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.536414,
+  lng: 135.194062
+}, {
+  name: '<a href="https://www.access-ticket.com/shop/detail/54">アクセスチケット　</br> 京都四条店</a>',
+  time1: '11:00～20:00',
+  time2: '11:00～20:00',
+  time3: '11:00～20:00',
+  lat: 35.003818,
+  lng: 135.766761
+}, {
+  name: '<a href="https://www.access-ticket.com/shop/detail/55">アクセスチケット </br> 京都三条店</a>',
+  time1: '11:00~20:00',
+  time2: '11:00~20:00',
+  time3: '11:00~20:00',
+  lat: 35.008568,
+  lng: 135.768833
+}, {
+  name: '<a href="https://www.kounan.com/shop/?mode=show&seq=21">甲南チケット　</br> 四条烏丸店</a>',
+  time1: '10:00~19:00',
+  time2: '10:00~19:00',
+  time3: '10:00~18:00',
+  lat: 35.003560,
+  lng: 135.761214
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k006/">京都信用金　</br> 北大路支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.040957,
+  lng: 135.749090
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k007/">京都信用金庫　</br> 鞍馬口支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.038844,
+  lng: 135.759469
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k008/">京都信用金庫　</br> 北野支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.027673,
+  lng: 135.731759
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k031/">京都信用金庫　</br> 北山支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.051998,
+  lng: 135.766960
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k072/">京都信用金庫　</br> 紫竹支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.049428,
+  lng: 135.744362
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k089/">京都信用金庫　</br> 西賀茂支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.057110,
+  lng: 135.747659
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k005/">京都信用金庫　</br> 西陣支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.030194,
+  lng: 135.742659
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k058/">京都信用金庫　</br> 丸太町支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.017487,
+  lng: 135.753571
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k004/">京都信用金庫　</br> 銀閣寺支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.026935,
+  lng: 135.791855
+} , {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k027/">京都信用金庫　</br> 修学院支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.049210,
+  lng: 135.792256
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k057/">京都信用金庫　</br> 岩倉支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.065151,
+  lng: 135.780836
+} , {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k064/">京都信用金庫　</br> 下鴨支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.044212,
+  lng: 135.769901
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k086/">京都信用金庫　</br> 岩倉中町支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.073707,
+  lng: 135.788227
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k093/">京都信用金庫　</br> 百万遍支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.033755,
+  lng: 135.780814
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k002/">京都信用金庫　</br> 河原町支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.011183,
+  lng: 135.765604
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k003/">京都信用金庫　</br> 三条支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.008725,
+  lng: 135.755725
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k028/">京都信用金庫　</br> 円町支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.018861,
+  lng: 135.729695
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k050/">京都信用金庫　</br> 朱雀支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.007840,
+  lng: 135.743978
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k010/">京都信用金庫　</br> 東山支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.982477,
+  lng: 135.773413
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k079/">京都信用金庫　</br> 祇園支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.000232,
+  lng: 135.777714
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k001/">京都信用金庫　</br> 本店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.003426,
+  lng: 135.764278
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k016/">京都信用金庫　</br> 西大路支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.988965,
+  lng: 135.732725
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k061/">京都信用金庫　</br> 七条支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.989300,
+  lng: 135.750154
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k013/">京都信用金庫　</br> 九条支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.979816,
+  lng: 135.758569
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k015/">京都信用金庫　</br> 吉祥院支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.978413,
+  lng: 135.733769
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k046/">京都信用金庫　</br> 上鳥羽支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.965754,
+  lng: 135.733615
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k075/">京都信用金庫　</br> 十条支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.973045,
+  lng: 135.745691
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k023/">京都信用金庫　</br> 梅津支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.003850,
+  lng: 135.706416
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k049/">京都信用金庫　</br> 嵯峨支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.014547,
+  lng: 135.688779
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k063/">京都信用金庫　</br> 西院支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.003383,
+  lng: 135.730774
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k068/">京都信用金庫　</br> 常盤支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.021127,
+  lng: 135.698518
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k095/">京都信用金庫　</br> 御室支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.028399,
+  lng: 135.711498
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k022/">京都信用金庫　</br> 伏見支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.933153,
+  lng: 135.757683
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k025/">京都信用金庫　</br> 北伏見支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.946099,
+  lng: 135.762797
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k039/">京都信用金庫　</br> 六地蔵支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.934725,
+  lng: 135.794413
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k048/">京都信用金庫　</br> 南桃山支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.929711,
+  lng: 135.784636
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k053/">京都信用金庫　</br> 桃山支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.939751,
+  lng: 135.768272
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k078/">京都信用金庫　</br> 稲荷支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.969237,
+  lng: 135.770716
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k024/">京都信用金庫　</br> 山科支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.972227,
+  lng: 135.814878
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k052/">京都信用金庫　</br> 北山科支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.986895,
+  lng: 135.811543
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k055/">京都信用金庫　</br> 西山科支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.977210,
+  lng: 135.797499
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k021/">京都信用金庫　</br> 桂支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.979457,
+  lng: 135.701708
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k056/">京都信用金庫　</br> 洛西支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.959622,
+  lng: 135.682746
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k069/">京都信用金庫　</br> 物集女支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.982369,
+  lng: 135.692830
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k084/">京都信用金庫　</br> 樫原支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.971670,
+  lng: 135.694316
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k090/">京都信用金庫　</br> 東桂支店</a>',
+  time1: '10:00~17:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.975937,
+  lng: 135.706337
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k066/">京都信用金庫　</br> 西宇治支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.896425,
+  lng: 135.782789
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k080/">京都信用金庫　</br> 宇治支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.889071,
+  lng: 135.801496
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k018/">京都信用金庫　</br> 亀岡支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.015326,
+  lng: 135.580620
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k051/">京都信用金庫　</br> 東亀岡支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.002943,
+  lng: 135.596395
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k026/">京都信用金庫　</br> 城陽支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.868517,
+  lng: 135.777238
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k083/">京都信用金庫　</br> 城陽駅前支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.854907,
+  lng: 135.781962
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k047/">京都信用金庫　</br> 桂川支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.961374,
+  lng: 135.705618
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k105/">京都信用金庫　</br> 東向日支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.953067,
+  lng: 135.702818
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k017/">京都信用金庫　</br> 長岡支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.926086,
+  lng: 135.695156
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k070/">京都信用金庫　</br> 西山天王山支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.912407,
+  lng: 135.688684
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k076/">京都信用金庫　</br> 滝ノ町支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.942119,
+  lng: 135.696211
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k060/">京都信用金庫　</br> 三山木支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.799036,
+  lng: 135.786364
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k103/">京都信用金庫　</br> 松井山手支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.832684,
+  lng: 135.727942
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k019/">京都信用金庫　</br> 園部支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.110370,
+  lng: 135.472733
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k020/">京都信用金庫　</br> 八木支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 35.070336,
+  lng: 135.533253
+}, {
+  name: '<a href="http://sasp.mapion.co.jp/b/kyoto_shinkin/info/k087/">京都信用金庫　</br> 久御山支店</a>',
+  time1: '09:00~15:00',
+  time2: 'closed',
+  time3: 'closed',
+  lat: 34.875180,
+  lng: 135.756250
+}, {
+  name: '<a href="https://www.reforte.com/shop/">リフォルテ　</br> 京都錦店</a>',
+  time1: '10:30~19:00',
+  time2: '10:30~19:00',
+  time3: 'closed',
+  lat: 35.004869,
+  lng: 135.762543
+}, {
+  name: '<a href="https://www.reforte.com/shop/">リフォルテ　</br> 京都本店</a>',
+  time1: '10:00~18:00',
+  time2: '10:00~18:00',
+  time3: 'closed',
+  lat: 35.000605,
+  lng: 135.755291
+}, {
+  name: '<a href="https://smartexchange.jp/map/4678/">smart exchange </br> KOMEHYO京都新京極店</a>',
+  time1: '11:00~21:00 (close:Wednesday)',
+  time2: '11:00~21:00',
+  time3: '11:00~21:00',
+  lat: 35.003955,
+  lng: 135.767153
+}, {
+  name: '<a href="https://smartexchange.jp/map/4337/">smart exchange </br> トロッコ嵯峨駅</a>',
+  time1: '8:35~17:10',
+  time2: '8:35~17:10',
+  time3: '8:35~17:10',
+  lat: 35.018524,
+  lng: 135.680766
+}, {
+  name: '<a href="https://smartexchange.jp/map/4087/">smart exchange </br> あけぼの亭</a>',
+  time1: '10:00-18:00',
+  time2: '10:00-18:00',
+  time3: '10:00-18:00',
+  lat: 34.996407,
+  lng: 135.780974
+}, {
+  name: '<a href="https://smartexchange.jp/map/3951/">smart exchange </br> 高台寺 賑店</a>',
+  time1: '9:30-17:30',
+  time2: '9:30-17:30',
+  time3: '9:30-17:30',
+  lat: 34.999622,
+  lng: 135.780775
+}, {
+  name: '<a href="https://smartexchange.jp/map/3866/">smart exchange </br> フレスコ東山安井店</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 34.999111,
+  lng: 135.776990
+}, {
+  name: '<a href="https://smartexchange.jp/map/3816/">smart exchange </br> 水色亭</a>',
+  time1: '9:00-18:00',
+  time2: '9:00-18:00',
+  time3: '9:00-18:00',
+  lat: 34.998524,
+  lng: 135.777841
+}, {
+  name: '<a href="https://smartexchange.jp/map/3817/">smart exchange </br> 桜花ビル</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.00372,
+  lng: 135.774117
+}, {
+  name: '<a href="https://smartexchange.jp/map/3747/">smart exchange </br> 京都あじびる河原町</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.007383,
+  lng: 135.769228
+}, {
+  name: '<a href="https://smartexchange.jp/map/3748/">smart exchange </br> 京都イマージアムビル</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.004260,
+  lng: 135.770315
+}, {
+  name: '<a href="https://smartexchange.jp/map/3749/">smart exchange </br> エンターテイメントオメガ寺町</a>',
+  time1: '10:00-22:45',
+  time2: '10:00-22:45',
+  time3: '10:00-22:45',
+  lat: 35.004408,
+  lng: 135.766770
+}, {
+  name: '<a href="https://smartexchange.jp/map/3697/">smart exchange </br> 鞄館タニムラ</a>',
+  time1: '11:00-20:00',
+  time2: '11:00-20:00',
+  time3: '11:00-20:00',
+  lat: 35.006294,
+  lng: 135.767104
+}, {
+  name: '<a href="https://smartexchange.jp/map/3641/">smart exchange </br> 京都清水寺 ちぎりや</a>',
+  time1: '11:00-18:00',
+  time2: '11:00-18:00',
+  time3: '11:00-18:00',
+  lat: 34.996459,
+  lng: 135.780531
+}, {
+  name: '<a href="https://smartexchange.jp/map/3513/">smart exchange </br> ニューヤマザキデイリーストア 嵯峨天龍寺店</a>',
+  time1: '6:00-22:00',
+  time2: '6:00-22:00',
+  time3: '6:00-22:00',
+  lat: 35.016495,
+  lng: 135.680578
+}, {
+  name: '<a href="https://smartexchange.jp/map/3481/">smart exchange </br> 京都マルイ</a>',
+  time1: '10:30-20:30',
+  time2: '10:30-20:30',
+  time3: '10:30-20:30',
+  lat: 35.003559,
+  lng: 135.769632
+}, {
+  name: '<a href="https://smartexchange.jp/map/3329/">smart exchange </br> 阪急 嵐山駅</a>',
+  time1: '7:00～19:00',
+  time2: '8:00-18:00',
+  time3: '8:00-18:00',
+  lat: 35.010250,
+  lng: 135.681587
+}, {
+  name: '<a href="https://smartexchange.jp/map/3330/">smart exchange </br> 阪急河原町駅</a>',
+  time1: '5:00-0:47',
+  time2: '5:00-0:47',
+  time3: '5:00-0:47',
+  lat: 35.003758,
+  lng: 135.768592
+}, {
+  name: '<a href="https://smartexchange.jp/map/3331/">smart exchange </br> 嵐電 四条大宮駅</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.003487,
+  lng: 135.748632
+}, {
+  name: '<a href="https://smartexchange.jp/map/3332/">smart exchange </br> イビススタイルズ京都ステーション</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 34.983819,
+  lng: 135.758381
+}, {
+  name: '<a href="https://smartexchange.jp/map/3268/">smart exchange </br> ハリケーン寺町京極店</a>',
+  time1: '12:00-22:00',
+  time2: '12:00-22:00',
+  time3: '12:00-22:00',
+  lat: 35.006029,
+  lng: 135.767074
+}, {
+  name: '<a href="https://smartexchange.jp/map/3256/">smart exchange </br> 京都・時代祭館 十二十二</a>',
+  time1: '10:00-18:00',
+  time2: '10:00-18:00',
+  time3: '10:00-18:00',
+  lat: 35.015099,
+  lng: 135.781465
+}, {
+  name: '<a href="https://smartexchange.jp/map/3258/">smart exchange </br> 知恩院三門前バス駐車場</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat:35.005306,
+  lng:135.781419
+}, {
+  name: '<a href="https://smartexchange.jp/map/2936/">smart exchange </br> 京都タワー</a>',
+  time1: '9:00-18:00',
+  time2: '9:00-18:00',
+  time3: '9:00-18:00',
+  lat: 34.987527,
+  lng: 135.759194
+}, {
+  name: '<a href="https://smartexchange.jp/map/2938/">smart exchange </br> i-station</a>',
+  time1: '10:00 - 17:00',
+  time2: '10:00 - 17:00',
+  time3: '10:00 - 17:00',
+  lat: 34.967440,
+  lng: 135.771000
+}, {
+  name: '<a href="https://smartexchange.jp/map/2939/">smart exchange </br> ダイワロイヤルホテルグランデ京都</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 34.983822,
+  lng: 135.762931
+}, {
+  name: '<a href="https://smartexchange.jp/map/2662/">smart exchange </br> 三井ガーデンホテル京都四条</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.002944,
+  lng: 135.754977
+}, {
+  name: '<a href="https://smartexchange.jp/map/2640/">smart exchange </br> 嵐電 嵐山駅嵐電 嵐山駅</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.015442,
+  lng: 135.677743
+}, {
+  name: '<a href="https://smartexchange.jp/map/2628/">smart exchange </br> スギ薬局 四条河原町店</a>',
+  time1: '09:00 - 23:00',
+  time2: '09:00 - 23:00',
+  time3: '09:00 - 23:00',
+  lat: 35.005128,
+  lng: 135.768991
+}, {
+  name: '<a href="https://smartexchange.jp/map/2528/">smart exchange </br> 藤井大丸</a>',
+  time1: '11:00 - 20:00',
+  time2: '11:00 - 20:00',
+  time3: '11:00 - 20:00',
+  lat: 35.003268,
+  lng: 135.766540
+}, {
+  name: '<a href="https://smartexchange.jp/map/2514/">smart exchange </br> グランドプリンスホテル京都</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.062968,
+  lng: 135.781369
+}, {
+  name: '<a href="https://smartexchange.jp/map/2444/">smart exchange </br> 京阪 中書島駅</a>',
+  time1: '5:00 - 24:00',
+  time2: '5:00 - 24:00',
+  time3: '5:00 - 24:00',
+  lat: 34.926897,
+  lng: 135.760368
+}, {
+  name: '<a href="https://smartexchange.jp/map/1974/">smart exchange </br> 近鉄 京都駅</a>',
+  time1: '5:30 - 23:20',
+  time2: '5:30 - 23:20',
+  time3: '5:30 - 23:20',
+  lat: 34.984704,
+  lng: 135.757883
+}, {
+  name: '<a href="https://smartexchange.jp/map/1849/">smart exchange </br> 知恩院和順会館</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.004450,
+  lng: 135.780634
+}, {
+  name: '<a href="https://smartexchange.jp/map/1856/">smart exchange </br> ベッセルホテルカンパーナ京都五条</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 34.995780,
+  lng: 135.761276
+}, {
+  name: '<a href="https://smartexchange.jp/map/1892/">smart exchange </br> 京都市清水坂観光駐車場</a>',
+  time1: '07:00~17:30',
+  time2: '07:00~17:30',
+  time3: '07:00~17:30',
+  lat: 34.996106,
+  lng: 135.779991
+}, {
+  name: '<a href="https://smartexchange.jp/map/1897/">smart exchange </br> ギオンクロチクビル</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.003951,
+  lng: 135.775773
+}, {
+  name: '<a href="https://smartexchange.jp/map/1813/">smart exchange </br> 三井ガーデンホテル京都三条</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.008287,
+  lng: 135.758806
+}, {
+  name: '<a href="https://smartexchange.jp/map/1816/">smart exchange </br> 漬物もり錦店</a>',
+  time1: '8:30 - 17:30',
+  time2: '8:30 - 17:30',
+  time3: '8:30 - 17:30',
+  lat: 35.005006,
+  lng: 135.766406
+}, {
+  name: '<a href="https://smartexchange.jp/map/1826/">smart exchange </br> 近鉄 丹波橋駅</a>',
+  time1: '5:30 - 23:30',
+  time2: '5:30 - 23:30',
+  time3: '5:30 - 23:30',
+  lat: 34.938542,
+  lng: 135.766181
+}, {
+  name: '<a href="https://smartexchange.jp/map/1885/">smart exchange </br> 京阪宇治駅 観光案内所</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 34.894394,
+  lng: 135.806425
+}, {
+  name: '<a href="https://smartexchange.jp/map/1886/">smart exchange </br> 京阪出町柳駅 構内</a>',
+  time1: '6:00～24:00',
+  time2: '6:00～24:00',
+  time3: '6:00～24:00',
+  lat: 35.030411,
+  lng: 135.773238
+}, {
+  name: '<a href="https://smartexchange.jp/map/1887/">smart exchange </br> 京阪清水五条駅 構内</a>',
+  time1: '6:00～24:00',
+  time2: '6:00～24:00',
+  time3: '6:00～24:00',
+  lat: 34.995827,
+  lng: 135.768618
+}, {
+  name: '<a href="https://smartexchange.jp/map/1888/">smart exchange </br> 京あみ 銀閣寺店</a>',
+  time1: '9:00 - 16:30(March to Nov 17:00)',
+  time2: '9:00 - 16:30(March to Nov 17:00)',
+  time3: '9:00 - 16:30(March to Nov 17:00)',
+  lat: 35.027320,
+  lng: 135.795512
+}, {
+  name: '<a href="https://smartexchange.jp/map/1889/">smart exchange </br> 西陣織会館</a>',
+  time1: '10:00 - 17:00(Mar to Oct 18:00)',
+  time2: '10:00 - 17:00(Mar to Oct 18:00)',
+  time3: '10:00 - 17:00(Mar to Oct 18:00)',
+  lat: 35.028848,
+  lng: 135.751633
+}, {
+  name: '<a href="https://smartexchange.jp/map/1878/">smart exchange </br> 京阪 伏見稲荷駅</a>',
+  time1: '6:00～0:00',
+  time2: '6:00～0:00',
+  time3: '6:00～0:00',
+  lat: 34.968813,
+  lng: 135.769161
+}, {
+  name: '<a href="https://smartexchange.jp/map/909/">smart exchange </br> 寺町通 SKビル</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 35.007847,
+  lng: 135.766873
+}, {
+  name: '<a href="https://smartexchange.jp/map/1469/">smart exchange </br> 総本家 ゆどうふ奥丹清水</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 34.997941,
+  lng: 135.780797
+}, {
+  name: '<a href="https://smartexchange.jp/map/896/">smart exchange </br> 京阪電鉄 三条駅</a>',
+  time1: '5:05 - 24:00',
+  time2: '5:05 - 24:00',
+  time3: '5:05 - 24:00',
+  lat: 35.008891,
+  lng: 135.772274
+}, {
+  name: '<a href="https://smartexchange.jp/map/891/">smart exchange </br> 京阪電鉄 祇園四条駅</a>',
+  time1: '5:05 - 24:00',
+  time2: '5:05 - 24:00',
+  time3: '5:05 - 24:00',
+  lat: 35.003333,
+  lng: 135.771932
+}, {
+  name: '<a href="https://smartexchange.jp/map/887/">smart exchange </br> 平安神宮</a>',
+  time1: '6:00 - 18:00',
+  time2: '6:00 - 18:00',
+  time3: '6:00 - 18:00',
+  lat: 35.015412,
+  lng: 135.783248
+}, {
+  name: '<a href="https://smartexchange.jp/map/883/">smart exchange </br> 漢字ミュージアム</a>',
+  time1: '9:30 - 17:00',
+  time2: '9:30 - 17:00',
+  time3: '9:30 - 17:00(定休日月曜)',
+  lat: 35.003496,
+  lng: 135.776720
+}, {
+  name: '<a href="https://smartexchange.jp/map/766/">smart exchange </br> 河原町OPA</a>',
+  time1: '11:00 - 21:00',
+  time2: '11:00 - 21:00',
+  time3: '11:00 - 21:00',
+  lat: 35.004425,
+  lng: 135.768904
+}, {
+  name: '<a href="https://smartexchange.jp/map/755/">smart exchange </br> WITH YOU</a>',
+  time1: '11:00 - 22:00',
+  time2: '11:00 - 22:00',
+  time3: '11:00 - 22:00',
+  lat: 35.005292,
+  lng: 135.766799
+}, {
+  name: '<a href="https://smartexchange.jp/map/587/">smart exchange </br> 関西寿司 万吉</a>',
+  time1: '9:00 - 19:30',
+  time2: '9:00 - 19:30',
+  time3: '9:00 - 19:30',
+  lat: 34.968158,
+  lng: 135.769644
+}, {
+  name: '<a href="https://smartexchange.jp/map/580/">smart exchange </br> 近商ストア ハーベス京都店</a>',
+  time1: '9:00 - 21:00',
+  time2: '9:00 - 21:00',
+  time3: '9:00 - 21:00',
+  lat: 34.984543,
+  lng: 135.757511
+}, {
+  name: '<a href="https://smartexchange.jp/map/576/">smart exchange </br> 嵐山 良彌</a>',
+  time1: '8:00 - 17:00',
+  time2: '8:00 - 17:00',
+  time3: '8:00 - 17:00',
+  lat: 35.013854,
+  lng: 135.679770
+}, {
+  name: '<a href="https://smartexchange.jp/map/556/">smart exchange </br> 京都アバンティ</a>',
+  time1: '10:00 - 21:00',
+  time2: '10:00 - 21:00',
+  time3: '10:00 - 21:00',
+  lat: 34.983703,
+  lng: 135.760328
+}, {
+  name: '<a href="https://smartexchange.jp/map/533/">smart exchange </br> 松井薬局 京都駅前店</a>',
+  time1: '8:00 - 24:00',
+  time2: '8:00 - 24:00',
+  time3: '10:00 - 21:00',
+  lat: 34.987148,
+  lng: 135.761243
+}, {
+  name: '<a href="https://smartexchange.jp/map/522/">smart exchange </br> 油そば ねこまた</a>',
+  time1: '24hours',
+  time2: '24hours',
+  time3: '24hours',
+  lat: 34.997459,
+  lng: 135.777085
+}
+];
+  let latlng = new google.maps.LatLng({lat:maps[maps.length-1]['lat'],lng: maps[maps.length-1]['lng']});
+
+    let map = new google.maps.Map(document.getElementById('map'), { 
+     center: latlng,
+      zoom: 18
+   });
+
+   for(let i = 0; i<maps.length; i++){
+
+    let marker = new google.maps.Marker({
+      position:{lat: maps[i]['lat'], lng: maps[i]['lng']},
+      map: map
+    });
+
+    marker.addListener('click',function(){
+      let infowindow = new google.maps.InfoWindow({
+        content: '<div>' + maps[i]["name"] + '</div>'+ '<div>' + 'weekday / ' + maps[i]["time1"] + '</div>' + '<div>' + 'saturday / ' + maps[i]["time2"] + '</div>' + '<div>' + 'holiday / ' + maps[i]["time3"] + '</div>'
+      });
+      infowindow.open(map,marker);
+    })
+   };
+</script>
+
+  </body>
+</html>
+
+<!-- , {
+  name: '<a href="">smart exchange </br> </a>',
+  time1: '',
+  time2: '',
+  time3: '',
+  lat: ,
+  lng: 135.
+} -->
